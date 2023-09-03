@@ -1,0 +1,51 @@
+Cisco ACL = Access Control List
+
+1 a cisco ACL is either numbered of titled
+
+2 if you want somthing allowed input permit, if blocked input deny
+
+3 a cisco ACL reads from top to bottom
+
+4 ther is a implicit deny any any at the bottom
+
+5 A standard ACL is from 1-99. exteded is from 100-199
+
+
+
+                       protocol    hacker        victim       port
+
+
+conf t
+ access-list 100 permit icmp host 200.0.0.2 host 192.168.10.11
+ access-list 100 deny tcp host 200.0.0.2 host 192.168.10.11 eq 23
+ access-list 100 deny icmp host 200.0.0.2 host 192.168.10.22
+ access-list 100 permit ip host 200.0.0.2 host 192.168.10.22
+
+ access-list 100 permit tcp host 202.0.0.3 host 192.168.10.11 eq 19
+ access-list 100 permit tcp host 202.0.0.3 host 192.168.10.11 eq 21
+ access-list 100 deny tcp host 202.0.0.3 host 192.168.10.11 eq 80
+ access-list 100 deny tcp host 202.0.0.3 host 192.168.10.11 eq 443
+
+ access-list 100 permit udp host 204.0.0.4 host 192.168.10.22 eq 69
+ access-list 100 permit tcp host 204.0.0.4 host 192.168.10.11 eq 53
+ access-list 100 deny ip host 204.0.0.4 host 192.168.10.11
+end
+
+conf t
+ int s1/0
+  ip access-group 100 in
+end
+
+
+pc1 and pc2
+conf t
+ ip http server
+ ip http securte-server
+ service tcp-small-server
+ service udp-small-server
+ line vty 0 14
+  no login
+end
+
+
+

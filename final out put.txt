@@ -1,0 +1,128 @@
+------------------------------------------------------------------------------------------
+initial config
+------------------------------------------------------------------------------------------
+
+enable
+conf t
+ no ip domain lookup
+ hostname Fredleonard
+ service password encryption
+ enable secret pass
+ line con 0
+  logging synchronous
+  exec-timeout 0 0
+  password pass
+  login
+exit
+ line vty 0 14
+  password cisco
+  login
+  exec-timeout 0 0
+exit
+ int vlan 1
+  ip address 192.168.10.1 255.255.255.0
+  no shut
+end
+
+-----------------------------------------------------------------------------------------
+Dynamic Host Configuration Protocol
+-----------------------------------------------------------------------------------------
+
+conf t
+
+ ip dhcp excluded-address 24.0.0.1 24.0.0.69
+ ip dhcp pool fred
+  network 24.0.0.0 255.0.0.0
+  default-router 24.0.0.1
+  dns-server 208.67.222.222 208.67.220.220
+  option 150 ip 24.0.0.1 !TFTP server
+end
+
+sh voice port summary
+
+----------------------------------------------
+anoalog telephone
+-------------------------------------------
+
+conf t
+ voice-port 0/0/3
+  cptone gb
+  signal loopstart
+  comfort-noise
+exit
+ no dial-peer voice 2 
+ dial-peer voice 2 pots
+  destination-pattern 2422
+  port 0/0/3
+end
+
+-----------------------------------------------------
+ip phones
+------------------------------------------------------
+
+conf t
+ telephony-service
+  max-ephone 10
+  max-dn 20
+   ip source-address 24.0.0.1
+   no auto assign
+   no auto-reg-ephone
+   create cnf-files
+end
+
+------------------------------------------------------
+Register IP phones
+------------------------------------------------------
+
+conf t
+ ephone 1
+  mac-address 1234.1234.1234
+exit
+ ephone 2
+  mac-address 1234.1234.1234
+end
+
+
+-------------------------------------------------------
+Creating DN number
+-------------------------------------------------------
+
+conf t
+ ephone-dn 1
+  number 2410
+ ephone-dn 2
+  number 2423
+ ephone-dn 3
+  number 2419
+ ephone-dn 4
+  number 2434
+end
+
+conf t
+ ephone 1
+  button 1:1 4:4
+ ephone 2
+  button 2:2 3:3
+end
+
+--------------------------------------------------
+Connect to neighbor
+--------------------------------------------------
+
+conf t
+ dial-peer voice 10 voip
+  destination-pattern 23..
+  session target ipv4:192.168.23.1
+  codec g711ulaw
+  no vad
+  dtmf-relay h245-alphanumeric
+end
+
+
+
+
+
+
+
+
+

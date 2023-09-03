@@ -1,0 +1,41 @@
+-----------------------------------------------------
+ip phones
+------------------------------------------------------
+
+conf t
+ telephony-service
+  max-ephone 10
+  max-dn 20
+   ip source-address 24.0.0.1
+   no auto assign
+   no auto-reg-ephone
+   create cnf-files
+end
+
+-------------------------------------------------------
+Creating DN number
+-------------------------------------------------------
+
+conf t
+ ephone-dn 1
+  number 2410
+ ephone-dn 4
+  number 2434
+end
+
+conf t
+ ephone 1
+  button 1:2410 4:2434
+end
+
+
+Connect to neighbor
+
+conf t
+ dial-peer voice 10 voip
+  destination-pattern y..
+  session target ipv4:200.0.0.y
+  codec g711ulaw
+  no vad
+  dtmf-relay h245-alphanumeric
+end

@@ -1,0 +1,7 @@
+conf t
+ no ip routing
+ ip routing
+ defaut int fa 0/0
+ default in se 1/0
+ default int se 1/1
+end

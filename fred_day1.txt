@@ -1,0 +1,64 @@
+------------------------------------------------------------------------------------------
+initial config
+------------------------------------------------------------------------------------------
+
+enable
+conf t
+ no ip domain lookup
+ hostname Fredleonard
+ service password encryption
+ enable secret pass
+ line con 0
+  logging synchronous
+  exec-timeout 0 0
+  password pass
+  login
+exit
+ line vty 0 14
+  password cisco
+  login
+  exec-timeout 0 0
+exit
+ int vlan 1
+  ip address 192.168.10.1 255.255.255.0
+  no shut
+end
+
+-----------------------------------------------------------------------------------------
+Dynamic Host Configuration Protocol
+-----------------------------------------------------------------------------------------
+
+conf t
+
+ ip dhcp excluded-address 192.168.10.1 192.168.10.20
+ ip dhcp excluded-address 192.168.10.240 192.168.10.25
+ ip dhcp pool lebron
+  network 192.168.10.0 255.255.255.0
+  default-router 192.168.10.1
+  dns-server 8.8.8.8 4.2.2.2
+  option 150 ip 192.168.10.1 !TFTP server
+end
+
+sh voice port summary
+
+
+conf t
+ voice-port 0/0/3
+  cptone gb
+  signal loopstart
+  comfort-noise
+exit
+ no dial-peer voice 2 
+ dial-peer voice 2 pots
+  destination-pattern 2422
+  port 0/0/3
+end
+
+
+
+
+
+
+
+
+
